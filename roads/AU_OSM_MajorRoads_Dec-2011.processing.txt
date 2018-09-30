@@ -1,0 +1,6 @@
+In ArcMap loaded the AU_CloudMade_OpenStreetMap-Dec-2011 shapefile then used the Analysis Tools/Extract/Select tool to extract the major roads.
+
+Input Feature Class: australia_highway.shp
+Output Feature Class: AU_OSM_MajorRoads.shp
+
+"TYPE" = 'trunk' OR "TYPE" = 'trunk_link' OR "TYPE" = 'tertiary' OR "TYPE" = 'tertiary link' OR "TYPE" = 'tertiary; primary_link' OR "TYPE" = 'tertiary_link' OR "TYPE" = 'secondary_link' OR "TYPE" = 'secondary link' OR "TYPE" = 'secondary' OR "TYPE" = 'primary_link' OR "TYPE" = 'primary' OR "TYPE" = 'motorway' OR "TYPE" = 'motorway_link'
