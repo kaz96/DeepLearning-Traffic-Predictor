@@ -1,0 +1,103 @@
+from mpl_toolkits.basemap import Basemap
+import matplotlib.pyplot as plt
+import os
+import pandas as pd
+import matplotlib.animation as animation
+import matplotlib as mpl
+
+
+import numpy as np
+
+
+
+
+fig=plt.figure()
+
+
+cwd = os.getcwd()
+direct = (cwd + "/roads/ausroad")
+
+
+map = Basemap(projection = 'mill',
+              llcrnrlat=-37.868924,
+              llcrnrlon=144.861161,
+              urcrnrlat=-37.772217,
+              urcrnrlon=145.087438)
+
+
+HawLat, HawLong =  -37.8076153,144.9703478
+
+xpt,ypt = map(HawLong,HawLat)
+
+map.fillcontinents()
+#map.readshapefile(direct,'roads')
+
+
+
+
+plt.annotate("LATROBE  ST SW OF VICTORIA ST",(xpt,ypt),xytext=(5, 5), textcoords='offset points')
+
+
+
+csv = np.genfromtxt('processed.csv', delimiter=",", dtype='U')
+time = csv[1:,1]
+cars = csv[1:,9]
+
+
+max_cars =np.max(cars.astype(np.int))
+min_cars =np.min(cars.astype(np.int))
+
+# Time 00:00:01,00:00:02
+time=np.array([s.split(None, 1)[1] for s in time])
+
+
+
+
+
+
+highestval = 0
+
+#COLOUR MAP
+norm = plt.Normalize(vmin=min_cars, vmax=max_cars)
+pointcolors = plt.cm.ScalarMappable(norm)
+col = pointcolors.to_rgba(cars.astype(np.float))
+
+cax = plt.imshow(col, interpolation='nearest')
+sc = plt.scatter(xpt, ypt,zorder=10)
+cm=plt.colorbar(cax)
+
+plots=[]
+test = 0
+def animate(i):
+
+    global highestval
+    for j, a in enumerate(plots):
+        a.remove()
+    plots[:] = []
+
+    val=cars[i].astype(int)
+
+    if val > highestval:
+        highestval=val
+
+
+
+    sc = plt.scatter(xpt, ypt,color=col[i],zorder=10)
+    plots.append(sc)
+
+    plt.xlabel("Highest Value: " + highestval.astype(str))
+    plt.title('Time:' + time[i])
+    return sc
+
+
+ani = animation.FuncAnimation(fig, animate, frames=int(np.argmax(time)), interval=1)
+
+
+
+plt.show()
+
+
+
+
+
+
